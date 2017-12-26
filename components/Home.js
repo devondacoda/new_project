@@ -4,7 +4,7 @@ import { StackNavigator } from 'react-navigation';
 
 const Home = ({ navigation }) => (
   <View style={styles.container}>
-    <Text>Check out my Homie, Screen!</Text>
+    <Text style={styles.title}>Planet Emoji! 🌎</Text>
     <Button title="Start Game"
       onPress={() => navigation.navigate('Game')} />
   </View>
@@ -15,6 +15,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  title: {
+    fontSize: 40,
   },
 });
 

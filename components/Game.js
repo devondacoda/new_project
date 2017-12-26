@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
-// import { StackNavigator } from 'react-navigation';
-import { emojis } from '../utils/emoji';
+import emojis from '../utils/emoji';
 import { formatInput, checkAnswer } from '../utils/game';
 
 class Game extends Component {
@@ -11,14 +10,13 @@ class Game extends Component {
     this.state = {
       emojiArr: [],
       randomQuestion: 0,
-      score: 0,
+      score: -1,
       guess: '',
       message: 'Guess the phrase!',
     };
 
     this.restartGame = this.restartGame.bind(this);
     this.pickRandomQuestion = this.pickRandomQuestion.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleInputSubmit = this.handleInputSubmit.bind(this);
   }
 
@@ -36,10 +34,6 @@ class Game extends Component {
 
   pickRandomQuestion(questionsArr) {
     return Math.floor(Math.random() * questionsArr.length);
-  }
-
-  handleInputChange(guess) {
-    this.setState({ guess });
   }
 
   handleInputSubmit() {
@@ -71,29 +65,32 @@ class Game extends Component {
     } = this.state;
     return (
       <View style={styles.container}>
-        <Text>{message}</Text>
-        <Text> 
-          Score: 
-          <Text style={styles.greenAndBold}>
-            {score}
+        <View> 
+          <Text>
+            Score: <Text style={styles.greenAndBold}>{score}</Text>
           </Text>
-        </Text>
+        </View>
         {
-          emojiArr.length ? 
+          emojiArr.length && score > -1 ? 
           <View style={styles.container}>
-            <Text>{emojiArr[randomQuestion].question}</Text>
-            <TextInput
-              onChangeText={this.handleInputChange}
-              value={guess}
-              placeholder={message}/>
-            <Button
-              title="Submit"
-              onPress={this.handleInputSubmit} />
+            <View style={[styles.container, styles.gameplay]}>
+              <Text style={styles.content}>{emojiArr[randomQuestion].question}</Text>
+              <TextInput
+                style={styles.gameInput}
+                onChangeText={guess => this.setState({ guess })}
+                value={guess}
+                placeholder={message}
+                placeholderTextColor="white"/>
+                <Button
+                color="red"
+                title="Submit"
+                onPress={this.handleInputSubmit} />
+            </View>
             <Button
               title="Restart Game"
               onPress={this.restartGame} />
           </View>
-          : null
+          : <Text>{message}</Text>
         } 
       </View>
     );
@@ -104,12 +101,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#AAA',
+    backgroundColor: 'goldenrod',
     justifyContent: 'center',
   },
   greenAndBold: {
     color: '#33FF55',
     fontWeight: 'bold',
+  },
+  gameInput: {
+    width: '70%',
+    backgroundColor: 'rgba(40, 120, 20, 0.7)',
+    textAlign: 'center',
+  },
+  gameplay: {
+    borderRadius: 2,
+    maxHeight: 500,
+    width: 500,
+    backgroundColor: '#bab',
+    borderWidth: 2,
+  },
+  content: {
+    fontSize: 35,
+    padding: '6%',
+    textAlign: 'center',
+    width: '100%',
   },
 });
 
